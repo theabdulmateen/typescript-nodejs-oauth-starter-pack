@@ -33,9 +33,9 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 			user = await prisma.user.findUnique({
 				where: authValidator.findUserFromEmail(req.body.emailOrUsername),
 			})
-		} else if (check(req.body.emailOrUsername).length === 8) {
+		} else {
 			user = await prisma.user.findUnique({
-				where: authValidator.findUserFromEmail(req.body.emailOrUsername),
+				where: authValidator.findUserFromUsername(req.body.emailOrUsername),
 			})
 		}
 
@@ -65,7 +65,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 			.isEmail()
 			.normalizeEmail({ gmail_remove_dots: false })
 			.run(req)
-		await check('username', 'Username is not valid').isLength({ min: 8, max: 8 }).run(req)
+		await check('username', 'Username is not valid').isLength({ min: 3, max: 16 }).run(req)
 		await check('password')
 			.isLength({ min: 5 })
 			.withMessage('must be at least 5 chars long')

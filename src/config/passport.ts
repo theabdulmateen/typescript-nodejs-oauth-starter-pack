@@ -70,6 +70,9 @@ passport.use(
 						},
 						create: {
 							email: profile._json.email,
+							username:
+								profile.username ||
+								profile.displayName + Math.random().toString().substr(2, 5),
 							facebookId: profile.id,
 							fistName: profile.name?.givenName,
 							lastName: profile.name?.familyName,
@@ -109,6 +112,9 @@ passport.use(
 						},
 						create: {
 							email: profile._json.email,
+							username:
+								profile.username ||
+								profile.displayName + Math.random().toString().substr(2, 5),
 							googleId: profile.id,
 							fistName: profile.name?.givenName,
 							lastName: profile.name?.familyName,
