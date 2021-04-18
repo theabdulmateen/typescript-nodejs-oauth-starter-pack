@@ -4,7 +4,6 @@ import passportGoogle from 'passport-google-oauth20'
 import PassportJwt, { StrategyOptions as JWTStrategyOptions } from 'passport-jwt'
 import { PrismaClient } from '@prisma/client'
 
-// import * as authValidator from '../utils/validators/auth'
 import constants from '../constants'
 
 const FacebookStrategy = passportFacebook.Strategy

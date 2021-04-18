@@ -27,15 +27,15 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
 		let user: User | null = null
 
-		if (check(req.body.emailOrSRN).isEmail()) {
-			await check('emailOrSRN').normalizeEmail({ gmail_remove_dots: false }).run(req)
+		if (check(req.body.emailOrUsername).isEmail()) {
+			await check('emailOrUsername').normalizeEmail({ gmail_remove_dots: false }).run(req)
 
 			user = await prisma.user.findUnique({
-				where: authValidator.findUserFromEmail(req.body.emailOrSRN),
+				where: authValidator.findUserFromEmail(req.body.emailOrUsername),
 			})
-		} else if (check(req.body.emailOrSRN).length === 8) {
+		} else if (check(req.body.emailOrUsername).length === 8) {
 			user = await prisma.user.findUnique({
-				where: authValidator.findUserFromEmail(req.body.emailOrSRN),
+				where: authValidator.findUserFromEmail(req.body.emailOrUsername),
 			})
 		}
 
@@ -65,7 +65,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 			.isEmail()
 			.normalizeEmail({ gmail_remove_dots: false })
 			.run(req)
-		await check('srn', 'SRN is not valid').isLength({ min: 8, max: 8 }).run(req)
+		await check('username', 'Username is not valid').isLength({ min: 8, max: 8 }).run(req)
 		await check('password')
 			.isLength({ min: 5 })
 			.withMessage('must be at least 5 chars long')
@@ -82,7 +82,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 
 		const hashedPassword = await argon2.hash(req.body.password)
 		const user = await prisma.user.create({
-			data: authValidator.createUser(req.body.email, req.body.srn, hashedPassword),
+			data: authValidator.createUser(req.body.email, req.body.username, hashedPassword),
 		})
 
 		const tokenJWT = authUtils.generateJWTToken(user)

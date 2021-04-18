@@ -11,12 +11,6 @@ export type Constants = {
 	GOOGLE_CALLBACK_URL: string
 }
 
-declare module 'passport' {
-	interface Profile {
-		email: string
-	}
-}
-
 declare global {
 	namespace Express {
 		interface User extends PrismaUser {}
